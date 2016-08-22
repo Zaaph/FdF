@@ -6,7 +6,7 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/05 12:14:21 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/08/05 16:53:51 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/08/22 11:32:39 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,23 @@ typedef	struct		fdf_var
 	int				y;
 	int				winwth;
 	int				winght;
-	int				imgwth;
-	int				imgght;
 	int				sizeline;
 	int				bpp;
 	int				endian;
-	int				img_x;
-	int				img_y;
-	unsigned char	color1;
-	unsigned char	color2;
-	unsigned char	color3;
-	unsigned long	img_color;
-}					var_lst;
+}					fdf_var;
+
+typedef	struct		img_var
+{
+	void	*img;
+	int		height;
+	int		width;
+	int		x;
+	int		y;
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	unsigned long	color;
+}					img_var;
 
 
 #endif

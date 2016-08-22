@@ -6,26 +6,28 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/03 13:35:52 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/08/05 16:56:34 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/08/22 13:10:06 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "fdf.h"
 
-void	ft_img_pixel_put(var_lst lst)
+void	ft_img_pixel_put(img_var img, fdf_var lst)
 {
-	lst.color1 = (lst.img_color & 0xFF0000) >> 24;
-	lst.color2 = (lst.img_color & 0xFF0000) >> 16;
-	lst.color3 = (lst.img_color & 0xFF0000) >> 8;
+	img.r = ((img.color & 0xFF000000) >> 24);
+	img.g = ((img.color & 0xFF0000) >> 16);
+	img.b = ((img.color & 0xFF00) >> 8);
 
-	lst.data[lst.y * lst.sizeline + lst.x * lst.bpp / 8] = lst.color1;
-	lst.data[lst.y * lst.sizeline + lst.x * lst.bpp / 8 + 1] = lst.color2;
-	lst.data[lst.y * lst.sizeline + lst.x * lst.bpp / 8 + 2] = lst.color3;
+	lst.data[img.y * lst.sizeline + img.x * lst.bpp / 8] = img.r;
+	lst.data[img.y * lst.sizeline + img.x * lst.bpp / 8 + 1] = img.g;
+	lst.data[img.y * lst.sizeline + img.x * lst.bpp / 8 + 2] = img.b;;
 }
 
 int	main()
 {
-	var_lst	lst;
+	fdf_var	lst;
+	img_var img;
 	int		x;
 	char	*y;
 
@@ -33,31 +35,26 @@ int	main()
 	lst.winwth = 500;
 	lst.winght = 500;
 	lst.bpp = 8;
-	lst.imgwth = 250;
-	lst.imgght = 250;
-	lst.img_x = 125;
-	lst.img_y = 125;
-	lst.sizeline = (lst.bpp * lst.imgwth) / 8;
-	y = (char*)&x;
-	if (*y+48 == 0)
-		lst.endian = 1;
-	else
-		lst.endian = 0;
+	img.width = 250;
+	img.height = 250;
+	img.x = 125;
+	img.y = 125;
+	lst.sizeline = (lst.bpp * img.width) / 8;
 	lst.win = mlx_new_window(lst.mlx, lst.winwth, lst.winght, "test");
-	lst.img = mlx_new_image(lst.mlx, lst.imgwth, lst.imgght);
-	lst.data = mlx_get_data_addr(lst.img, &lst.bpp, &lst.sizeline, &lst.endian);
-	lst.img_color = mlx_get_color_value(lst.mlx, BROWN);
-	while (lst.y < 200)
+	img.img = mlx_new_image(lst.mlx, img.width, img.height);
+	lst.data = mlx_get_data_addr(img.img, &lst.bpp, &lst.sizeline, &lst.endian);
+	img.color = mlx_get_color_value(lst.mlx, PURPLE);
+	while (img.y < 250)
 	{
-		lst.x = 125;
-		while (lst.x < 125)
+		ft_img_pixel_put(img, lst);
+		img.y++;
+		if (img.y == 250 && img.x < 250)
 		{
-			ft_img_pixel_put(lst);
-			lst.x++;
+			img.y = 125;
+			img.x++;
 		}
-		lst.y++;
 	}
-	mlx_put_image_to_window(lst.mlx, lst.win, lst.img, lst.img_x, lst.img_y);
+	mlx_put_image_to_window(lst.mlx, lst.win, img.img, 125, 125);
 	mlx_loop(lst.mlx);
 	return (0);
 }
