@@ -6,7 +6,7 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/05 12:14:21 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/09/06 11:50:47 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/09/19 14:19:01 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define BROWN 0x663300
 # include <stdio.h>
 # include <mlx.h>
-
+# include "libft/libft.h"
 
 typedef	struct		fdf_var
 {
@@ -46,8 +46,8 @@ typedef	struct		img_var
 	void			*img;
 	int				height;
 	int				width;
-	int				x;
-	int				y;
+	float			dx;
+	float			dy;
 	int				x1;
 	int				x2;
 	int				y1;
@@ -58,6 +58,5 @@ typedef	struct		img_var
 	unsigned long	color;
 }					img_var;
 
-void	ft_img_pixel_put(img_var img, fdf_var lst);
-
+void	ft_img_pixel_put(img_var img, fdf_var lst, int x, int y);
 #endif

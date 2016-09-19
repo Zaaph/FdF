@@ -6,7 +6,7 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/05 12:14:21 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/09/05 17:20:50 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/09/06 11:50:47 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <stdio.h>
 # include <mlx.h>
 
-void	ft_img_pixel_put(img_var img, fdf_var lst);
 
 typedef	struct		fdf_var
 {
@@ -49,11 +48,16 @@ typedef	struct		img_var
 	int				width;
 	int				x;
 	int				y;
+	int				x1;
+	int				x2;
+	int				y1;
+	int				y2;
 	int				r;
 	int				g;
 	int				b;
 	unsigned long	color;
 }					img_var;
 
+void	ft_img_pixel_put(img_var img, fdf_var lst);
 
 #endif
