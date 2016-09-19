@@ -6,7 +6,7 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/03 13:35:52 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/09/19 16:52:24 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/09/19 19:08:06 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,30 @@ void	ft_img_pixel_put(img_var img, fdf_var lst, int x, int y)
 	lst.data[++i] = img.r;
 }
 
+void	ft_draw_ver_n_hor(img_var img, fdf_var lst)
+{
+	while (img.y1 < img.y2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.y1++;
+	}
+	while (img.y2 < img.y1)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.y1--;
+	}
+	while (img.x1 < img.x2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.x1++;
+	}
+	while (img.x2 < img.x1)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.x1--;
+	}
+}
+
 void	ft_draw_line(img_var img, fdf_var lst)
 {
 	int	e;
@@ -34,7 +58,17 @@ void	ft_draw_line(img_var img, fdf_var lst)
 	e = img.x2 - img.x1;
 	img.dx = e * 2;
 	img.dy = (img.y2 - img.y1) * 2;
-	while (img.x1 <= img.x2)
+	if (img.dx == 0)
+	{
+		ft_draw_ver_n_hor(img, lst);
+		return ;
+	}
+	if (img.dy == 0)
+	{
+		ft_draw_ver_n_hor(img, lst);
+		return ;
+	}
+	while (img.x1 < img.x2)
 	{
 		ft_img_pixel_put(img, lst, img.x1, img.y1);
 		img.x1++;
@@ -62,10 +96,10 @@ int	main()
 	lst.bpp = 8;
 	img.width = 600;
 	img.height = 600;
-	img.x1 = 100;
-	img.x2 = 110;
-	img.y1 = 100;
-	img.y2 = 600;
+	img.x1 = 500;
+	img.x2 = 200;
+	img.y1 = 200;
+	img.y2 = 200;
 	lst.sizeline = (lst.bpp * img.width) / 8;
 	lst.win = mlx_new_window(lst.mlx, lst.winwth, lst.winght, "test");
 	img.img = mlx_new_image(lst.mlx, img.width, img.height);
