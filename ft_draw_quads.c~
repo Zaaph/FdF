@@ -1,0 +1,221 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_put_pixel.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/08/03 13:35:52 by emihoubi          #+#    #+#             */
+/*   Updated: 2016/09/22 15:06:08 by emihoubi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <unistd.h>
+#include "fdf.h"
+
+void	ft_img_pixel_put(img_var img, fdf_var lst, int x, int y)
+{
+	int	i;
+
+	i = y * lst.sizeline + x * (lst.bpp / 8);
+	img.b = ((img.color & 0xFF));
+	img.r = ((img.color & 0xFF0000) >> 16);
+	img.g = ((img.color & 0xFF00) >> 8);
+
+	lst.data[i] = img.b;
+	lst.data[++i] = img.g;
+	lst.data[++i] = img.r;
+}
+
+void	ft_draw_frst_quad(img_var img, fdf_var lst)
+{
+	if (img.x >= img.y)
+	{
+		img.e = img.x;
+		while (img.x1++ < img.x2)
+		{
+			ft_img_pixel_put(img, lst, img.x1, img.y1);
+			img.e = img.e - img.dy;
+			if (img.e < 0)
+			{
+				img.y1++;
+				img.e = img.e + img.dx;
+			}
+		}
+		return ;
+	}
+	img.e = img.y;
+	while (img.y1++ < img.y2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.e = img.e - img.dx;
+		if (img.e < 0)
+		{
+			img.x1++;
+			img.e = img.e + img.dy;
+		}
+	}
+}
+
+void	ft_draw_last_quad(img_var img, fdf_var lst)
+{
+	if (img.x >= -img.y)
+	{
+		img.e = img.x;
+		while (img.x1++ < img.x2)
+		{
+			ft_img_pixel_put(img, lst, img.x1, img.y1);
+			img.e = img.e + img.dy;
+			if (img.e < 0)
+			{
+				img.y1--;
+				img.e = img.e + img.dx;
+			}
+		}
+		return ;
+	}
+	img.e = img.y;
+	while (img.y1-- > img.y2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.e = img.e + img.dx;
+		if (img.e > 0)
+		{
+			img.x1++;
+			img.e = img.e + img.dy;
+		}
+	} 
+}
+
+void	ft_draw_scnd_quad(img_var img, fdf_var lst)
+{
+	if (-img.x >= img.y)
+	{
+		img.e = img.x;
+		while (img.x1-- > img.x2)
+		{
+			ft_img_pixel_put(img, lst, img.x1, img.y1);
+			img.e = img.e + img.dy;
+			if (img.e >= 0)
+			{
+				img.y1++;
+				img.e = img.e + img.dx;
+			}
+		}
+		return ;
+	}
+	img.e = img.y;
+	while (img.y1++ < img.y2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.e = img.e + img.dx;
+		if (img.e <= 0)
+		{
+			img.x1--;
+			img.e = img.e + img.dy;
+		}
+	}
+}
+
+void	ft_draw_thrd_quad(img_var img, fdf_var lst)
+{
+	if (img.x <= img.y)
+	{
+		img.e = img.x;
+		while (img.x1-- > img.x2)
+		{
+			ft_img_pixel_put(img, lst, img.x1, img.y1);
+			img.e = img.e - img.dy;
+			if (img.e >= 0)
+			{
+				img.y1--;
+				img.e = img.e + img.dx;
+			}
+		}
+		return ;
+	}
+	img.e = img.y;
+	while (img.y1-- > img.y2)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.e = img.e - img.dx;
+		if (img.e >= 0)
+		{
+			img.x1--;
+			img.e = img.e + img.dy;
+		}
+	}
+}
+/*void	ft_draw_ver_n_hor(img_var img, fdf_var lst)
+{
+	while (img.y1 < img.y2 && img.dx == 0)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.y1++;
+	}
+	while (img.y2 < img.y1 && img.dx == 0)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.y1--;
+	}
+	while (img.x1 < img.x2 && img.dy == 0)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.x1++;
+	}
+	while (img.x2 < img.x1 && img.dy == 0)
+	{
+		ft_img_pixel_put(img, lst, img.x1, img.y1);
+		img.x1--;
+	}
+}*/
+
+void	ft_draw_line(img_var img, fdf_var lst)
+{
+	img.e = img.x2 - img.x1;
+	img.x = img.e;
+	img.y = img.y2 - img.y1;
+	img.dx = img.x * 2;
+	img.dy = img.y * 2;
+	if (img.x > 0)
+	{
+		if (img.y > 0)
+			ft_draw_frst_quad(img, lst);
+		else
+			ft_draw_last_quad(img, lst);
+	}
+	if (img.x < 0)
+	{
+		if (img.y > 0)
+			ft_draw_scnd_quad(img, lst);
+		else
+			ft_draw_thrd_quad(img, lst);
+	}
+}
+
+int	main()
+{
+	fdf_var	lst;
+	img_var img;
+
+	lst.mlx = mlx_init();
+	lst.winwth = 1000;
+	lst.winght = 1000;
+	lst.bpp = 8;
+	img.width = 900;
+	img.height = 900;
+	img.x1 = 300;
+	img.x2 = 300;
+	img.y1 = 800;
+	img.y2 = 500;
+	lst.sizeline = (lst.bpp * img.width) / 8;
+	lst.win = mlx_new_window(lst.mlx, lst.winwth, lst.winght, "test");
+	img.img = mlx_new_image(lst.mlx, img.width, img.height);
+	lst.data = mlx_get_data_addr(img.img, &lst.bpp, &lst.sizeline, &lst.endian);
+	img.color = mlx_get_color_value(lst.mlx, PINK);
+	ft_draw_line(img, lst);
+	/*ft_draw_first_quad(img, lst);*/
+	mlx_put_image_to_window(lst.mlx, lst.win, img.img, 50, 50);
+	mlx_loop(lst.mlx);
+	return (0);
+}

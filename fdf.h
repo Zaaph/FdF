@@ -6,7 +6,7 @@
 /*   By: emihoubi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/08/05 12:14:21 by emihoubi          #+#    #+#             */
-/*   Updated: 2016/09/19 14:19:01 by emihoubi         ###   ########.fr       */
+/*   Updated: 2016/09/22 15:25:39 by emihoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ typedef	struct		img_var
 	int				width;
 	float			dx;
 	float			dy;
+	int				e;
+	int				x;
+	int				y;
 	int				x1;
 	int				x2;
 	int				y1;
@@ -59,4 +62,10 @@ typedef	struct		img_var
 }					img_var;
 
 void	ft_img_pixel_put(img_var img, fdf_var lst, int x, int y);
+void	ft_draw_frst_quad(img_var img, fdf_var lst);
+void	ft_draw_scnd_quad(img_var img, fdf_var lst);
+void	ft_draw_thrd_quad(img_var img, fdf_var lst);
+void	ft_draw_last_quad(img_var img, fdf_var lst);
+void	ft_draw_vert(img_var img, fdf_var lst);
+void	ft_draw_line(img_var img, fdf_var lst);
 #endif
